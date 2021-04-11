@@ -72,6 +72,11 @@ export default defineComponent({
     todos: [] as Itodo[],
   }),
 
+  created() {
+    // インスタンス作成時に自動的に fetch() する
+    this.todos = todoStorage.fetch();
+  },
+
   methods: {
     // ToDo 追加の処理
     // doAdd: function (event: any, value: any) {

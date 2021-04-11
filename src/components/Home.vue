@@ -26,6 +26,14 @@
         </tr>
       </tbody>
     </table>
+
+    <h2>新しい作業の追加</h2>
+    <form class="add-form" v-on:submit.prevent="doAdd">
+      <!-- コメント入力フォーム -->
+      コメント <input type="text" ref="comment" />
+      <!-- 追加ボタンのモック -->
+      <button type="submit">追加</button>
+    </form>
   </div>
 </template>
 

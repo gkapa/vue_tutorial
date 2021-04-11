@@ -67,9 +67,11 @@ var todoStorage = {
 
 export default defineComponent({
   el: "#app",
+
   data: () => ({
     todos: [] as Itodo[],
   }),
+
   methods: {
     // ToDo 追加の処理
     // doAdd: function (event: any, value: any) {
@@ -90,6 +92,18 @@ export default defineComponent({
       });
       // フォーム要素を空にする
       comment.value = "";
+    },
+  },
+
+  watch: {
+    // オプションを使う場合はオブジェクト形式にする
+    todos: {
+      // 引数はウォッチしているプロパティの変更後の値
+      handler: function (todos) {
+        todoStorage.save(todos);
+      },
+      // deep オプションでネストしているデータも監視できる
+      deep: true,
     },
   },
 });

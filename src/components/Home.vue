@@ -26,7 +26,7 @@
           <td class="state">
             <!-- 状態変更ボタンのモック -->
             <button v-on:click="doChangeState(item)">
-              {{ item.state }}
+              {{ labels[item.state] }}
             </button>
           </td>
           <td class="button">
@@ -56,6 +56,11 @@ interface Itodo {
   id: number;
   comment: string;
   state: number;
+}
+
+interface Ioption {
+  value: number;
+  label: string;
 }
 
 // https://jp.vuejs.org/v2/examples/todomvc.html
@@ -128,14 +133,30 @@ export default defineComponent({
       var index = this.todos.indexOf(item);
       this.todos.splice(index, 1);
     },
+  },
 
-    computedTodos: function () {
+  computed: {
+    labels() {
+      let res = {};
+      this.options.map((option: Ioption) => {
+        res = Object.assign(res, { [option.value]: option.label });
+      });
+      return res;
+      // return this.options.reduce(function (a: Ioption, b: Ioption) {
+      //   return Object.assign(a, { [b.value]: b.label });
+      // }, {});
+      // キーから見つけやすいように、次のように加工したデータを作成
+      // {0: '作業中', 1: '完了', -1: 'すべて'}
+    },
+
+    computedTodos() {
       // データ current が -1 ならすべて
       // それ以外なら current と state が一致するものだけに絞り込む\
       const current = this.current;
-      return this.todos.filter(function (el) {
+      const filteredTodos: Itodo[] = this.todos.filter(function (el) {
         return current < 0 ? true : current === el.state;
-      }, this);
+      });
+      return filteredTodos;
     },
   },
 

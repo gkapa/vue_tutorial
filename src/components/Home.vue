@@ -6,6 +6,8 @@
       }}
     </label>
 
+    {{ computedTodos.length }} 件を表示）
+
     <table>
       <!-- テーブルヘッダー -->
       <thead>
@@ -18,7 +20,7 @@
       </thead>
       <tbody>
         <!-- ここに <tr> で ToDo の要素を1行づつ繰り返し表示 -->
-        <tr v-for="item in todos" v-bind:key="item.id">
+        <tr v-for="item in computedTodos" v-bind:key="item.id">
           <th>{{ item.id }}</th>
           <td>{{ item.comment }}</td>
           <td class="state">
@@ -125,6 +127,15 @@ export default defineComponent({
     doRemove: function (item: Itodo) {
       var index = this.todos.indexOf(item);
       this.todos.splice(index, 1);
+    },
+
+    computedTodos: function () {
+      // データ current が -1 ならすべて
+      // それ以外なら current と state が一致するものだけに絞り込む\
+      const current = this.current;
+      return this.todos.filter(function (el) {
+        return current < 0 ? true : current === el.state;
+      }, this);
     },
   },
 

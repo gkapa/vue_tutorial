@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 import { defineComponent } from "vue";
 
 interface Itodo {
@@ -49,7 +50,7 @@ interface Itodo {
 // https://jp.vuejs.org/v2/examples/todomvc.html
 var STORAGE_KEY = "todos-vuejs-demo";
 var todoStorage = {
-  uid: null,
+  uid: 0,
 
   fetch: function () {
     var todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -67,8 +68,30 @@ var todoStorage = {
 export default defineComponent({
   el: "#app",
   data: () => ({
-    todos: [],
+    todos: [] as Itodo[],
   }),
+  methods: {
+    // ToDo 追加の処理
+    // doAdd: function (event: any, value: any) {
+    doAdd: function () {
+      // ref で名前を付けておいた要素を参照
+      var comment: any = this.$refs.comment;
+      // 入力がなければ何もしないで return
+      if (!comment.value.length) {
+        return;
+      }
+      // { 新しいID, コメント, 作業状態 }
+      // というオブジェクトを現在の todos リストへ push
+      // 作業状態「state」はデフォルト「作業中=0」で作成
+      this.todos.push({
+        id: todoStorage.uid++,
+        comment: comment.value,
+        state: 0,
+      });
+      // フォーム要素を空にする
+      comment.value = "";
+    },
+  },
 });
 </script>
 

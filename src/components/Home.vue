@@ -1,5 +1,11 @@
 <template>
   <div id="Home">
+    <label v-for="(label, idx) in options" :key="idx">
+      <input type="radio" v-model="current" v-bind:value="label.value" />{{
+        label.label
+      }}
+    </label>
+
     <table>
       <!-- テーブルヘッダー -->
       <thead>
@@ -73,6 +79,14 @@ export default defineComponent({
 
   data: () => ({
     todos: [] as Itodo[],
+    options: [
+      { value: -1, label: "すべて" },
+      { value: 0, label: "作業中" },
+      { value: 1, label: "完了" },
+    ],
+    // 選択している options の value を記憶するためのデータ
+    // 初期値を「-1」つまり「すべて」にする
+    current: -1,
   }),
 
   created() {

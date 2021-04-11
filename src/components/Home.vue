@@ -17,10 +17,13 @@
           <td>{{ item.comment }}</td>
           <td class="state">
             <!-- 状態変更ボタンのモック -->
-            <button>{{ item.state }}</button>
+            <button v-on:click="doChangeState(item)">
+              {{ item.state }}
+            </button>
           </td>
           <td class="button">
             <!-- 削除ボタンのモック -->
+            <button v-on:click.ctrl="doRemove(item)">削除</button>
             <button>削除</button>
           </td>
         </tr>
@@ -98,13 +101,24 @@ export default defineComponent({
       // フォーム要素を空にする
       comment.value = "";
     },
+
+    // 状態変更の処理
+    doChangeState: function (item: Itodo) {
+      item.state = item.state ? 0 : 1;
+    },
+
+    // 削除の処理
+    doRemove: function (item: Itodo) {
+      var index = this.todos.indexOf(item);
+      this.todos.splice(index, 1);
+    },
   },
 
   watch: {
     // オプションを使う場合はオブジェクト形式にする
     todos: {
       // 引数はウォッチしているプロパティの変更後の値
-      handler: function (todos) {
+      handler: function (todos: Itodo[]) {
         todoStorage.save(todos);
       },
       // deep オプションでネストしているデータも監視できる
